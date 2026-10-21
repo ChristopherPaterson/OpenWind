@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Credits</title>
+    <style>
+      :root { color-scheme: dark; }
+      body { margin: 0; background: #0b1220; color: #e8eef8; font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+      main { max-width: 860px; margin: 0 auto; padding: 24px 16px 48px; }
+      a { color: #5fb4ff; }
+      h1 { font-size: 26px; margin: 8px 0 4px; }
+      h2 { font-size: 18px; margin: 28px 0 8px; }
+      .muted { color: #9fb0c8; }
+      .wrap { overflow-x: auto; }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th, td { text-align: left; vertical-align: top; padding: 6px 8px; border-top: 1px solid rgba(255, 255, 255, 0.12); }
+      th { color: #9fb0c8; font-weight: 500; }
+      .warn { background: rgba(232, 210, 58, 0.12); border: 1px solid rgba(232, 210, 58, 0.4); border-radius: 8px; padding: 10px 12px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p><a href="/">← Back to the map</a> · <a href="/about.html">About</a></p>
+      <h1>Credits</h1>
+      <p class="muted">Everything on this site is built from other people's open data and software. Thank you to all of them. If you reuse the data, keep these attributions with it.</p>
+
+      <div class="wrap">
+      <h2>Forecast and map data</h2>
+      <table>
+        <tr><th>Model</th><th>Provider</th><th>Used for</th><th>Licence</th></tr>
+        <tr><td>GFS 0.25°</td><td>NOAA / NCEP</td><td>Wind, gust, pressure, rain, temperature, cloud, visibility, CAPE, jet stream</td><td>Public domain</td></tr>
+        <tr><td>GFS-Wave 0.25°</td><td>NOAA / NCEP</td><td>Waves, swell partitions</td><td>Public domain</td></tr>
+        <tr><td>IFS 0.25°</td><td>ECMWF</td><td>Wind, gust, pressure, rain, temperature, cloud, ocean surface currents, CAPE, jet stream</td><td>CC BY 4.0: contains modified ECMWF open data</td></tr>
+        <tr><td>WAM 0.25°</td><td>ECMWF</td><td>Waves</td><td>CC BY 4.0</td></tr>
+        <tr><td>ICON global (13 km)</td><td>Deutscher Wetterdienst</td><td>Wind, gust, pressure, temperature, cloud, CAPE (regridded)</td><td>CC BY 4.0</td></tr>
+        <tr><td>GWAM 0.25°</td><td>Deutscher Wetterdienst</td><td>Waves</td><td>CC BY 4.0</td></tr>
+        <tr><td>Satellite infrared</td><td>NASA GIBS; NOAA GOES; JMA Himawari</td><td>Satellite overlay</td><td>Free to use with credit</td></tr>
+      </table>
+      <p class="muted">Map: land and coastline © OpenStreetMap contributors (ODbL). Fonts: Noto Sans (SIL Open Font Licence). NOAA, ECMWF, DWD and NASA do not endorse this site.</p>
+      </div>
+
+      <h2>Software</h2>
+      <div class="wrap">
+      <table>
+        <tr><th>What</th><th>Used for</th><th>Licence</th></tr>
+        <tr><td>MapLibre GL JS</td><td>The map</td><td>BSD-3-Clause</td></tr>
+        <tr><td>React</td><td>The app</td><td>MIT</td></tr>
+        <tr><td>d3-contour</td><td>Isobars</td><td>ISC</td></tr>
+        <tr><td>FastAPI, Uvicorn, HTTPX</td><td>The API</td><td>MIT; BSD-3-Clause</td></tr>
+        <tr><td>NumPy, SciPy</td><td>Interpolation and regridding</td><td>BSD</td></tr>
+        <tr><td>ecCodes (ECMWF)</td><td>Reading the GRIB model files</td><td>Apache 2.0</td></tr>
+        <tr><td>GDAL, Tippecanoe</td><td>Building the basemap</td><td>MIT; BSD-2-Clause</td></tr>
+        <tr><td>Caddy</td><td>Serving the site</td><td>Apache 2.0</td></tr>
+        <tr><td>Noto Sans</td><td>Map labels</td><td>SIL Open Font Licence</td></tr>
+      </table>
+      </div>
+
+      <h2>Thanks</h2>
+      <p><a href="https://www.freethewind.com">Free the Wind</a> by <a href="https://seapeopleapp.com">SeaPeople</a>, who showed this could be done for free, and <a href="https://www.windy.com">Windy</a>, for setting the standard every weather map is measured against.</p>
+    </main>
+  </body>
+</html>

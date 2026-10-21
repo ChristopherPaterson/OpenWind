@@ -1,0 +1,39 @@
+{
+  "name": "openwind-web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "lint": "eslint src",
+    "test": "vitest run --dir src",
+    "format": "prettier --write src",
+    "format:check": "prettier --check src",
+    "e2e": "playwright test"
+  },
+  "dependencies": {
+    "d3-contour": "4.0.2",
+    "maplibre-gl": "6.13.0",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@playwright/test": "1.64.0",
+    "@types/d3-contour": "^3.0.6",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "@vitejs/plugin-react": "6.1.2",
+    "eslint": "10.12.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.13.0",
+    "prettier": "3.9.9",
+    "typescript": "5.9.3",
+    "typescript-eslint": "^8.71.2",
+    "vite": "8.3.4",
+    "vitest": "^5.0.5"
+  },
+  "version": "1.0.0",
+  "license": "MIT"
+}

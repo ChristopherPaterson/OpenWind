@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>About OpenWind</title>
+    <style>
+      :root { color-scheme: dark; }
+      body { margin: 0; background: #0b1220; color: #e8eef8; font: 15px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif; }
+      main { max-width: 860px; margin: 0 auto; padding: 24px 16px 48px; }
+      a { color: #5fb4ff; }
+      h1 { font-size: 26px; margin: 8px 0 4px; }
+      h2 { font-size: 18px; margin: 28px 0 8px; }
+      .muted { color: #9fb0c8; }
+      .wrap { overflow-x: auto; }
+      table { width: 100%; border-collapse: collapse; font-size: 14px; }
+      th, td { text-align: left; vertical-align: top; padding: 6px 8px; border-top: 1px solid rgba(255, 255, 255, 0.12); }
+      th { color: #9fb0c8; font-weight: 500; }
+      .warn { background: rgba(232, 210, 58, 0.12); border: 1px solid rgba(232, 210, 58, 0.4); border-radius: 8px; padding: 10px 12px; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <p><a href="/">← Back to the map</a> · <a href="/credits.html">Credits</a></p>
+      <h1>OpenWind</h1>
+      <p class="muted">A marine weather map built from free public forecast models.</p>
+
+      <p class="warn"><b>Not for navigation.</b> These are raw model forecasts, shown unblended and labelled by model and run. They can be wrong, late or missing. Use your national weather service's official forecasts and warnings for decisions at sea.</p>
+
+      <h2>Where the data comes from</h2>
+      <p>Forecasts from NOAA (GFS, GFS-Wave), ECMWF (IFS, WAM) and Deutscher Wetterdienst (ICON, GWAM), with maps from OpenStreetMap and satellite imagery from NASA, NOAA and JMA. Every source, its licence and the software behind the site are on the <a href="/credits.html">Credits</a> page.</p>
+
+      <h2>How it works</h2>
+      <p>New model runs are fetched as they are published, cropped and stored per run. The map draws the numbers on your device, so tapping anywhere reads the forecast value rather than a picture. Tap the map for a point chart with every model on the same axes: wind and gusts, waves, and ECMWF's ocean currents.</p>
+      <p>Service status: <a href="/v1/health">/v1/health</a>.</p>
+    </main>
+  </body>
+</html>

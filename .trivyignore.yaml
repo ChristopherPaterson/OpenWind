@@ -1,0 +1,19 @@
+# Accepted image findings (SECURITY.md, "Known and accepted"). Each has a reason and an expiry: when it
+# lapses, `trivy image --ignorefile .trivyignore.yaml openwind-app` fails again and the finding is looked at afresh.
+vulnerabilities:
+  - id: CVE-2022-29155
+    statement: >-
+      openldap 2.4.46 bundled inside ECMWF's eckitlib wheel (built on AlmaLinux 8), not Debian's. OpenWind makes no
+      LDAP queries, so the SQL injection has nothing to reach. Fixed only by an eckitlib rebuild upstream.
+    expired_at: 2027-01-17
+  - id: CVE-2022-1586
+    statement: >-
+      pcre2 10.32 bundled inside eckitlib (Debian's own pcre2 is 10.46, current). Needs attacker-chosen regular
+      expressions; OpenWind only decodes GRIB from NOAA, ECMWF and DWD. Fixed only by an eckitlib rebuild.
+    expired_at: 2027-01-17
+  - id: CVE-2022-1587
+    statement: As CVE-2022-1586 (the same bundled pcre2 in eckitlib).
+    expired_at: 2027-01-17
+  - id: CVE-2025-58050
+    statement: As CVE-2022-1586 (the same bundled pcre2 in eckitlib).
+    expired_at: 2027-01-17

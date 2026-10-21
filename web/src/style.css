@@ -1,0 +1,971 @@
+:root {
+  --bg: #0b1220;
+  --panel: rgba(14, 22, 38, 0.86);
+  --line: rgba(255, 255, 255, 0.14);
+  --text: #e8eef8;
+  --muted: #9fb0c8;
+  --accent: #5fb4ff;
+  color-scheme: dark;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font:
+    14px/1.35 system-ui,
+    -apple-system,
+    "Segoe UI",
+    sans-serif;
+}
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+}
+
+.app {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+.top,
+.layer-box,
+.readout,
+.meteogram,
+.timeline {
+  z-index: 3;
+}
+.map-wrap,
+.map {
+  position: absolute;
+  inset: 0;
+}
+.particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.8; /* a touch softer than the particle trails */
+}
+.current-arrows {
+  opacity: 1;
+}
+
+.top {
+  position: absolute;
+  top: max(10px, env(safe-area-inset-top));
+  left: 10px;
+  right: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  flex-wrap: wrap;
+  pointer-events: none;
+}
+.top > * {
+  pointer-events: auto;
+}
+.brand {
+  color: inherit;
+  text-decoration: none;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  background: var(--panel);
+  padding: 6px 10px;
+  border-radius: 8px;
+}
+.seg {
+  display: flex;
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 2px;
+}
+.seg button {
+  padding: 5px 12px;
+  border-radius: 6px;
+  color: var(--muted);
+}
+.seg button[aria-pressed="true"] {
+  background: var(--accent);
+  color: #06101f;
+  font-weight: 600;
+}
+.run {
+  background: var(--panel);
+  color: var(--muted);
+  padding: 6px 10px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.readout {
+  position: absolute;
+  left: 10px;
+  top: 64px;
+  background: var(--panel);
+  border-radius: 10px;
+  padding: 8px 10px;
+  display: flex;
+  gap: 10px;
+  align-items: start;
+}
+.readout b {
+  display: block;
+  font-size: 18px;
+}
+.readout span {
+  color: var(--muted);
+  font-size: 12px;
+}
+.readout button {
+  font-size: 20px;
+  line-height: 1;
+  color: var(--muted);
+}
+
+.pick {
+  width: 14px;
+  height: 14px;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.5);
+}
+.centre {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-shadow:
+    0 0 4px #000,
+    0 0 2px #000;
+  pointer-events: none;
+}
+.centre b {
+  font-size: 22px;
+  line-height: 1;
+}
+.centre span {
+  font-size: 11px;
+}
+.centre-H b {
+  color: #ff8a7a;
+}
+.centre-L b {
+  color: #8ac4ff;
+}
+
+.timeline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 8px 12px max(8px, calc(env(safe-area-inset-bottom) - 14px));
+  background: linear-gradient(transparent, rgba(6, 10, 18, 0.92) 30%);
+  display: grid;
+  grid-template-columns: auto auto 1fr;
+  grid-template-areas: "play when legend" "range range range" "credit credit credit";
+  gap: 4px 12px;
+  align-items: center;
+}
+.play {
+  grid-area: play;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #06101f;
+  font-size: 12px;
+}
+.when {
+  grid-area: when;
+  white-space: nowrap;
+}
+.timeline input[type="range"] {
+  grid-area: range;
+  width: 100%;
+  accent-color: var(--accent);
+}
+.credit {
+  grid-area: credit;
+  font-size: 10px;
+  color: var(--muted);
+  opacity: 0.8;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.credit a {
+  color: inherit;
+  text-decoration: underline;
+}
+.legend {
+  grid-area: legend;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.legend i {
+  display: block;
+  width: min(180px, 30vw);
+  height: 8px;
+  border-radius: 4px;
+}
+
+.meteogram {
+  position: absolute;
+  left: 10px;
+  right: 10px;
+  bottom: 86px;
+  background: rgba(14, 22, 38, 0.95);
+  border-radius: 10px;
+  padding: 8px 10px 22px;
+  max-width: 960px;
+  margin: 0 auto;
+}
+.meteogram .key {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 4px;
+}
+.chart {
+  display: block;
+}
+.chart .grid {
+  stroke: var(--line);
+}
+.chart .axis {
+  fill: var(--muted);
+  font-size: 11px;
+}
+.chart .now {
+  stroke: #fff;
+  stroke-opacity: 0.6;
+}
+.days {
+  position: relative;
+  height: 14px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.days span {
+  position: absolute;
+  transform: translateX(-50%);
+}
+
+.maplibregl-ctrl-bottom-right {
+  bottom: 92px;
+}
+
+@media (max-width: 640px) {
+  .readout {
+    top: 104px;
+  }
+  .meteogram {
+    bottom: 156px;
+  }
+  .maplibregl-ctrl-bottom-right {
+    bottom: 156px;
+  }
+}
+.muted {
+  color: var(--muted);
+  font-size: 12px;
+}
+.chip {
+  padding: 4px 8px;
+  border-radius: 8px;
+}
+.chip.ok,
+.dep.ok {
+  background: rgba(60, 185, 106, 0.16);
+}
+.chip.bad,
+.dep.bad {
+  background: rgba(224, 69, 42, 0.2);
+}
+.tabs {
+  display: flex;
+  gap: 4px;
+}
+.tabs button {
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  color: var(--muted);
+}
+.tabs button[aria-selected="true"] {
+  background: rgba(95, 180, 255, 0.2);
+  color: var(--text);
+}
+.arrow {
+  display: inline-block;
+}
+.run .offline {
+  color: #f0dc6a;
+}
+.meteogram {
+  touch-action: pan-y;
+}
+.chart .hover {
+  stroke: #fff;
+  stroke-opacity: 0.9;
+  stroke-dasharray: 3 2;
+}
+.tip {
+  position: absolute;
+  top: 6px;
+  z-index: 2;
+  pointer-events: none;
+  background: rgba(6, 10, 18, 0.95);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 8px;
+  font-size: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  white-space: nowrap;
+}
+.hover-card {
+  position: absolute;
+  z-index: 5;
+  pointer-events: none;
+  background: rgba(6, 10, 18, 0.92);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 9px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  font-size: 12px;
+  white-space: nowrap;
+  max-width: 260px;
+}
+.hover-card b {
+  font-size: 15px;
+}
+.hover-card .arrow {
+  display: inline-block;
+  font-weight: 700;
+  color: #ffd166;
+}
+.gear {
+  background: var(--panel);
+  border-radius: 8px;
+  padding: 5px 10px;
+  color: var(--muted);
+}
+.gear[aria-expanded="true"] {
+  color: var(--text);
+}
+.settings {
+  position: absolute;
+  top: 44px;
+  z-index: 6;
+  background: rgba(14, 22, 38, 0.97);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 13px;
+}
+.settings label {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  align-items: center;
+}
+.settings select {
+  background: #0b1220;
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 3px 5px;
+  font: inherit;
+}
+.settings .small {
+  font-size: 11px;
+  margin: 0;
+}
+
+/* Layer menu: one friendly button top right, opening a grouped panel. */
+.layer-box {
+  position: absolute;
+  top: max(10px, env(safe-area-inset-top));
+  right: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+  max-width: calc(100vw - 20px);
+}
+.layer-btn {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 7px 12px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+.layer-btn .badges {
+  font-weight: 400;
+  font-size: 12px;
+  color: var(--muted);
+}
+.layer-btn .chev {
+  color: var(--muted);
+  margin-left: 2px;
+}
+.layer-menu {
+  background: rgba(14, 22, 38, 0.97);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 8px;
+  width: min(320px, calc(100vw - 20px));
+  max-height: calc(100vh - 170px);
+  overflow-y: auto;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+.layer-menu .group + .group {
+  margin-top: 8px;
+}
+.layer-menu .group-label {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+  margin: 2px 4px 4px;
+}
+.layer-menu .grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+}
+.layer-menu .grid button {
+  text-align: left;
+  padding: 7px 9px;
+  border-radius: 8px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.04);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+.layer-menu .grid button:hover {
+  background: rgba(95, 180, 255, 0.12);
+}
+.layer-menu .grid button[aria-pressed="true"] {
+  background: rgba(95, 180, 255, 0.25);
+  box-shadow: inset 0 0 0 1px rgba(95, 180, 255, 0.6);
+  font-weight: 600;
+}
+.layer-menu .icon,
+.layer-btn .icon {
+  width: 1.3em;
+  text-align: center;
+}
+.layer-menu .toggles {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.layer-menu .toggle {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 7px 9px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  text-align: left;
+}
+.layer-menu .switch {
+  margin-left: auto;
+  width: 30px;
+  height: 16px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.18);
+  position: relative;
+}
+.layer-menu .switch::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #c9d4e6;
+  transition: left 0.15s;
+}
+.layer-menu .toggle[aria-pressed="true"] .switch {
+  background: #f2c500;
+}
+.layer-menu .toggle[aria-pressed="true"] .switch::after {
+  left: 16px;
+  background: #1a1300;
+}
+.top {
+  right: 200px;
+} /* leave the top-right corner to the layer button */
+
+/* ===== One control height, one look; a tidy phone layout ===== */
+.top {
+  gap: 8px;
+  right: 210px;
+}
+.brand,
+.seg,
+.gear,
+.layer-btn {
+  height: 36px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+.brand {
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+}
+.tools {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.seg {
+  align-items: center;
+  padding: 2px;
+}
+.seg button {
+  height: 30px;
+  padding: 0 12px;
+}
+.seg button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.gear {
+  width: 36px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  background: var(--panel);
+  color: var(--muted);
+}
+.settings {
+  top: 46px;
+  right: 0;
+}
+.settings a {
+  color: var(--accent);
+}
+.layer-btn {
+  padding: 0 12px;
+}
+.layer-menu .grid button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.timeline .row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.when {
+  flex: 1;
+  min-width: 0;
+}
+.runline {
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.forecast-tag {
+  color: var(--accent);
+  font-weight: 700;
+}
+.timeline.past input[type="range"] {
+  accent-color: #f0b429;
+}
+.legend {
+  flex: none;
+}
+
+@media (max-width: 640px) {
+  .brand,
+  .layer-btn .label,
+  .layer-btn .badges {
+    display: none;
+  }
+  .top {
+    right: 70px;
+  }
+  .tools {
+    width: calc(100% + 60px);
+  }
+  .seg {
+    flex: 1;
+  }
+  .seg button {
+    flex: 1;
+    padding: 0 6px;
+  }
+  .layer-btn {
+    width: 52px;
+    justify-content: center;
+    padding: 0;
+  }
+  .layer-btn .chev {
+    margin: 0;
+  }
+  .settings {
+    right: -60px;
+  }
+  .readout {
+    top: 104px;
+  }
+  .timeline .row {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+  .legend {
+    order: 5;
+    width: 100%;
+    justify-content: flex-start;
+  }
+  .legend i {
+    width: auto;
+    flex: 1;
+  }
+  .meteogram {
+    bottom: 150px;
+  }
+  .maplibregl-ctrl-bottom-right {
+    bottom: 150px;
+  }
+  .credit {
+    white-space: normal;
+    line-height: 1.35;
+  }
+}
+/* Phones pinch to zoom: keep only the location button. */
+@media (pointer: coarse) {
+  .maplibregl-ctrl-group:has(.maplibregl-ctrl-zoom-in) {
+    display: none;
+  }
+}
+.timeline {
+  align-items: stretch;
+}
+
+/* ===== Phones and foldables ===== */
+/* Keep clear of the Dynamic Island, the home bar and rounded corners in any orientation. */
+.top {
+  left: max(10px, env(safe-area-inset-left));
+}
+.layer-box {
+  right: max(10px, env(safe-area-inset-right));
+}
+.timeline {
+  padding-left: max(12px, env(safe-area-inset-left));
+  padding-right: max(12px, env(safe-area-inset-right));
+}
+.maplibregl-ctrl-bottom-right {
+  right: env(safe-area-inset-right);
+}
+/* Wide, short phone screens (the iPhone Duo's outer screen, phones in landscape): one row of controls. */
+@media (max-width: 640px) and (min-width: 460px) {
+  .tools {
+    width: auto;
+  }
+  .readout {
+    top: 60px;
+  }
+}
+@media (max-height: 520px) and (orientation: landscape) {
+  .brand,
+  .layer-btn .label,
+  .layer-btn .badges {
+    display: none;
+  }
+  .layer-btn {
+    width: 52px;
+    justify-content: center;
+    padding: 0;
+  }
+  .layer-btn .chev {
+    margin: 0;
+  }
+  .top {
+    right: max(70px, calc(env(safe-area-inset-right) + 60px));
+  }
+  .tools {
+    width: auto;
+  }
+  .credit {
+    white-space: nowrap;
+  }
+}
+/* Big touch screens (the iPhone Duo unfolded, iPads): finger-sized controls. */
+@media (pointer: coarse) and (min-width: 641px) {
+  .brand,
+  .seg,
+  .gear,
+  .layer-btn {
+    height: 44px;
+  }
+  .seg button {
+    height: 38px;
+    padding: 0 14px;
+  }
+  .gear {
+    width: 44px;
+  }
+  .settings {
+    top: 54px;
+  }
+  .seg button,
+  .layer-btn {
+    font-size: 15px;
+  }
+}
+/* Fingers need a bigger slider handle than a mouse. */
+@media (pointer: coarse) {
+  .timeline input[type="range"] {
+    height: 32px;
+  }
+}
+
+/* The footer: full on wide screens, one short line on phones (the licences still need the credits on the map). */
+.credit .short {
+  display: none;
+}
+@media (max-width: 640px) {
+  .credit {
+    white-space: nowrap;
+    font-size: 9px;
+    line-height: 1.2;
+  }
+  .credit .long {
+    display: none;
+  }
+  .credit .short {
+    display: inline;
+  }
+}
+@media (max-width: 379px) {
+  .credit {
+    white-space: normal;
+  }
+} /* iPhone SE: two short lines rather than cut off a credit */
+
+/* Settings hangs from the gear: a card under it on wide screens, the width of the controls on phones. */
+.tools {
+  position: relative;
+}
+.settings {
+  top: calc(100% + 8px);
+  right: 0;
+  left: auto;
+  width: 320px;
+  max-width: calc(100vw - 20px);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.45);
+}
+@media (max-width: 640px) {
+  .settings {
+    left: 0;
+    right: 0;
+    width: auto;
+  }
+}
+
+/* Full-screen phones (viewport-fit=cover): clear the status bar and the notch, and let the timeline run to the
+   bottom edge with only a sliver kept for the home bar. Screens without insets get zero here. */
+.top,
+.layer-box {
+  top: calc(max(10px, env(safe-area-inset-top)) + 6px);
+}
+@supports (padding: max(0px)) {
+  .timeline {
+    padding-bottom: max(8px, calc(env(safe-area-inset-bottom) - 20px));
+  }
+}
+
+/* Under the status bar on full-screen phones: a soft dark fade, so the status bar stays readable. Zero
+   height where there is no inset. */
+.app::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 4;
+  pointer-events: none;
+  height: calc(env(safe-area-inset-top) + 10px);
+  background: linear-gradient(#0b1220 0%, #0b1220 70%, rgba(11, 18, 32, 0));
+}
+/* Phones with rounded screen corners: keep the bottom credit line clear of the curve. */
+@media (max-width: 640px) {
+  .credit {
+    text-align: center;
+    padding: 0 max(18px, env(safe-area-inset-left));
+    font-size: 8.5px;
+    letter-spacing: -0.1px;
+  }
+}
+/* Particles source: a compact segmented row in the layer menu. */
+.layer-menu .flow-row {
+  display: flex;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+.layer-menu .flow-row button {
+  flex: 1;
+  padding: 6px 8px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.04);
+  font-size: 13px;
+}
+.layer-menu .flow-row button[aria-pressed="true"] {
+  background: var(--accent);
+  color: #06101f;
+  font-weight: 600;
+}
+
+/* Point chart: currents, with flow arrows every few hours. */
+.meteogram .current-chart {
+  position: relative;
+}
+.meteogram .current-arrows {
+  position: relative;
+  height: 14px;
+  margin-top: -2px;
+}
+.meteogram .current-arrows span {
+  position: absolute;
+  top: 0;
+  font-size: 11px;
+  line-height: 14px;
+  color: #3cc0a0;
+}
+.meteogram .charts {
+  position: relative;
+}
+.meteogram .chart-tabs {
+  display: flex;
+  gap: 4px;
+  margin: 4px auto 2px;
+  max-width: 480px;
+}
+.meteogram .chart-tabs button {
+  flex: 1;
+  padding: 4px 0;
+  font-size: 12px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: transparent;
+  color: var(--muted);
+}
+.meteogram .chart-tabs button[aria-selected="true"] {
+  background: rgba(95, 180, 255, 0.18);
+  color: #fff;
+  border-color: rgba(95, 180, 255, 0.5);
+}
+.meteogram.narrow {
+  padding: 6px 8px 20px;
+  max-height: 52vh;
+  overflow-y: auto;
+}
+.meteogram.narrow .key {
+  font-size: 11px;
+  gap: 8px;
+  margin-bottom: 2px;
+}
+.meteogram .current-label {
+  position: absolute;
+  top: 2px;
+  right: 4px;
+  font-size: 10px;
+  color: #3cc0a0;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes slide {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(290%);
+  }
+}
+.tag.best {
+  background: rgba(126, 224, 138, 0.18);
+  color: #7ee08a;
+  margin-right: 6px;
+}
+.flow-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--muted);
+  white-space: nowrap;
+}
+.flow-chip i {
+  width: 14px;
+  height: 2px;
+  border-radius: 1px;
+  box-shadow: 0 0 4px currentColor;
+}
+
+/* ===== Layout from measurements: nothing floating overlaps (layout.ts) =====
+   --top-b is the bottom of the top bar, --bottom-h the height the timeline takes; both are measured, so the
+   panels fit whatever the screen, wrapping or safe areas. Anything still overlapping something more important
+   gets .occluded until it is clear. */
+.occluded {
+  visibility: hidden !important;
+  pointer-events: none !important;
+}
+.readout {
+  top: calc(var(--top-b, 56px) + 8px);
+}
+.meteogram {
+  bottom: calc(var(--bottom-h, 100px) + 8px);
+  max-height: calc(100dvh - var(--top-b, 56px) - var(--bottom-h, 100px) - 90px); /* room for the readout */
+  overflow-y: auto;
+}
+.maplibregl-ctrl-bottom-right {
+  bottom: calc(var(--bottom-h, 100px) + 4px);
+}
+.layer-menu {
+  max-height: calc(100dvh - 70px - var(--bottom-h, 100px) - 8px);
+}
