@@ -48,7 +48,9 @@ describe("pressure", () => {
     return (1000 + Math.hypot(x, y)) * 100;
   });
   it("finds the low at the centre", () => {
-    expect(centres(pa, g)).toEqual([{ lon: 150, lat: -30, kind: "L", hpa: 1000 }]);
+    const found = centres(pa, g);
+    expect(found).toMatchObject([{ lon: 150, lat: -30, kind: "L", hpa: 1000 }]);
+    expect(found[0].depth).toBeCloseTo(Math.hypot(5, 5) * 100, 0); // rise to the edge of its ~5 degree window
   });
   it("draws isobars every 4 hPa", () => {
     const levels = new Set(isobars(pa, g).features.map((f) => f.properties.hpa));

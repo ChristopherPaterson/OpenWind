@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Highs and lows no longer pile up when zoomed out: they are map symbols now, and where they crowd only the
+  strongest shows; the rest come back as the map zooms in.
+
 ## 1.0.0
 
 First release.

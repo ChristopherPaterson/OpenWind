@@ -43,7 +43,9 @@ export function isobars(
   return { type: "FeatureCollection", features };
 }
 
-export type Centre = { lon: number; lat: number; kind: "H" | "L"; hpa: number };
+/** `depth` is how far (Pa) the centre stands out from its surroundings, so the map can keep the strongest
+ * when labels collide. */
+export type Centre = { lon: number; lat: number; kind: "H" | "L"; hpa: number; depth: number };
 
 /** Pressure centres: cells that are the lowest (or highest) within ~5 degrees and stand out from their
  * surroundings by at least 2 hPa. */
@@ -86,7 +88,13 @@ export function centres(pa: ArrayLike<number>, g: GridShape): Centre[] {
             Math.abs(o.lat - (g.north - y * g.step)) < 3,
         )
       )
-        out.push({ lon: g.west + x * g.step, lat: g.north - y * g.step, kind, hpa: Math.round(p / 100) });
+        out.push({
+          lon: g.west + x * g.step,
+          lat: g.north - y * g.step,
+          kind,
+          hpa: Math.round(p / 100),
+          depth: kind === "L" ? maxs[i] - p : p - mins[i],
+        });
     }
   return out;
 }

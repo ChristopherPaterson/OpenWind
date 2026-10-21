@@ -65,7 +65,6 @@ export default function WeatherMap(props: Props) {
   const mapRef = useRef<maplibregl.Map | null>(null);
   const particles = useRef<Particles | null>(null);
   const marker = useRef<maplibregl.Marker | null>(null);
-  const hl = useRef<maplibregl.Marker[]>([]);
   const ready = useRef<Promise<void> | null>(null);
   const draw = useRef(0);
   const baseDraw = useRef(0);
@@ -154,6 +153,7 @@ export default function WeatherMap(props: Props) {
             ],
           },
           isobars: { type: "geojson", data: EMPTY },
+          centres: { type: "geojson", data: EMPTY },
         },
         layers: [
           { id: "sea", type: "background", paint: { "background-color": "#0b1220" } },
@@ -244,6 +244,30 @@ export default function WeatherMap(props: Props) {
               "text-field": ["to-string", ["get", "hpa"]],
               "text-font": ["Noto Sans Regular"],
               "text-size": 11,
+            },
+            paint: { "text-color": "#ffffff", "text-halo-color": "#0b1220", "text-halo-width": 1.5 },
+          },
+          {
+            // Highs and lows as symbols, so where they crowd MapLibre fades out all but the strongest
+            // nearby; zoomed out each needs more clear space, and the rest come back as the map zooms in.
+            id: "centres",
+            type: "symbol",
+            source: "centres",
+            layout: {
+              "text-field": [
+                "format",
+                ["get", "kind"],
+                { "font-scale": 1.8, "text-color": ["match", ["get", "kind"], "H", "#ff8a7a", "#8ac4ff"] },
+                "\n",
+                {},
+                ["to-string", ["get", "hpa"]],
+                { "font-scale": 0.9 },
+              ],
+              "text-font": ["Noto Sans Regular"],
+              "text-size": 12,
+              "text-line-height": 1,
+              "text-padding": ["interpolate", ["linear"], ["zoom"], 2, 60, 6, 8], // more room zoomed out
+              "symbol-sort-key": ["-", ["get", "depth"]], // deepest lows and strongest highs win
             },
             paint: { "text-color": "#ffffff", "text-halo-color": "#0b1220", "text-halo-width": 1.5 },
           },
@@ -465,19 +489,23 @@ export default function WeatherMap(props: Props) {
       if (layer.seaOnly) map.setLayoutProperty("shade2-top", "visibility", "none");
 
       const iso = map.getSource("isobars") as maplibregl.GeoJSONSource;
-      hl.current.forEach((m) => m.remove());
-      hl.current = [];
+      const hl = map.getSource("centres") as maplibregl.GeoJSONSource;
       // Isobars from the pressure field, whether it is the shaded one or loaded alongside (wind).
       const mslp = layer.isobars ? r.also[layer.also!.indexOf("mslp")] : undefined;
       if (mslp) {
         iso.setData(isobars(mslp));
-        for (const c of centres(mslp)) {
-          const el = document.createElement("div");
-          el.className = `centre centre-${c.kind}`;
-          el.innerHTML = `<b>${c.kind}</b><span>${c.hpa}</span>`;
-          hl.current.push(new maplibregl.Marker({ element: el }).setLngLat([c.lon, c.lat]).addTo(map));
-        }
-      } else iso.setData(EMPTY);
+        hl.setData({
+          type: "FeatureCollection",
+          features: centres(mslp).map(({ lon, lat, ...properties }) => ({
+            type: "Feature",
+            properties,
+            geometry: { type: "Point", coordinates: [lon, lat] },
+          })),
+        });
+      } else {
+        iso.setData(EMPTY);
+        hl.setData(EMPTY);
+      }
 
       const named: Record<string, Field> = {};
       layer.scalar.forEach((v, k) => (named[v] = r.scalarFields[k]));
