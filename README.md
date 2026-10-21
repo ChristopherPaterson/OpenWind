@@ -5,7 +5,7 @@ side by side (never blended, always labelled by model and run): wind, gusts, pre
 cloud, visibility, storms, the jet stream, waves, swell and ocean currents, drawn on the device with
 animated particles.
 
-![OpenWind showing ECMWF wind with particles, isobars and highs and lows over Asia and Australia](docs/images/map.png)
+![OpenWind showing ECMWF wind with particles, isobars and highs and lows over Asia and Australia](docs/images/asia-australia-wind.png)
 
 > **Not for navigation.** Forecasts are raw model output from external services and their accuracy is not
 > guaranteed. Use your national weather service's official forecasts and warnings for decisions at sea.
